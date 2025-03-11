@@ -1,0 +1,36 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+html,body{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#cards{
+    display: flex !important;
+    justify-content: center !important;
+
+    margin-top: 2rem;
+}
+
+#card {
+    border-radius: 2rem  !important;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    width: 22rem !important;
+    /* height: 30rem !important; */
+}
+
+#card img{
+    border-radius:2rem 2rem 0rem 0rem !important;
+    /* width: 30rem; */
+    height: 17rem;
+    object-fit: cover;
+}
+section{
+    flex: 1;
+}

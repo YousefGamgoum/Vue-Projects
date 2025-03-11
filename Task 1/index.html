@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./Vue.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div id="MainDiv">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fs-3">
+            <div class="container">
+              <a class="navbar-brand h1 fs-2" href="#" @click.prevent="wishlist=false">Your Library</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse ms-5" id="navbarNav">
+                <ul class="navbar-nav text-warning ">
+                  <li v-for="book in books" :title="book.author" :key="book.ISBN" class="nav-item mx-4"> {{book.name}} </li>
+                </ul>
+                <div class="text-end">
+                    <button class="btn btn-success nav-item mx-4 text-end" @click="wishlist=true" >Display wish list</button>
+                </div>
+
+              </div>
+            </div>
+          </nav>
+          
+
+          <section  class="row mx-0" v-if="wishlist==false">
+                <div v-for="book in books" :key="book.ISBN" class="col-4" id="cards">
+                    <div  class="card" :class="[book.numberOfPages < 50 ? 'less' : 'more']" id="card" style="width: 18rem;">
+                        <img :src="book.image" class="card-img-top" :title="book.name" :alt="book.name">
+                        <div class="card-body row px-4">
+                            <div class="col-5">
+                                <h6 class="row card-title">Category: {{book.category}}</h6>
+                                <h6 class="row">Pages: {{book.numberOfPages}}</h6>
+                                <h6 class="row">ISBN: {{book.ISBN}}</h6>
+                            </div>
+                            <div class="col-7">
+                                <h6 class="row">Author: {{book.author}}</h6>
+                                <h6 class="row">Price: {{formatCurrency(book.price)}}</h6>
+                                <div class="row"><button class="btn btn-success " @click="addList(book)">Add to List</button></div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+          </section>
+          <div v-if="wishlist==true">
+            <h1 class="mt-5 text-danger text-center fw-bolder fs-2" v-if="list.length==0">You Don't Have Any Books In Wishlist</h1>
+            <table class="table container mt-4 table-dark table-striped" v-else>
+                <thead>
+                    <tr>
+                      <th scope="col">ISBN</th>
+                      <th scope="col">Book Name</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="book in list" :key="book.ISBN">
+                      <td>{{book.ISBN}}</td>
+                      <td>{{book.name}}</td>
+                      <td>{{book.category}}</td>
+                      <td>{{formatCurrency(book.price)}}</td>
+                      <td><button class="btn btn-outline-danger" @click="remove(book)">Remove from list</button></td>
+                    </tr>
+                  </tbody>
+            </table>
+          </div>
+         
+
+    </div>
+<section></section>
+    <footer class="p-5 bg-dark text-center text-warning mt-5">
+        <h1>Contact Your Library</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, explicabo?</p>
+    </footer>
+
+
+    <script>
+        const app = Vue.createApp({data:()=>({
+            books: [{ISBN:1,name:"Vue",category:"programing",image:"Images/Vue.jpg",numberOfPages:40,author:"Yousef",price:1200},
+                    {ISBN:2,name:"Ract",category:"programing",image:"Images/React.jpg",numberOfPages:50,author:"Ahmed",price:700},
+                    {ISBN:3,name:"Angular",category:"programing",image:"Images/Angular.png",numberOfPages:60,author:"Mohamed",price:400},
+                    {ISBN:4,name:"C++",category:"programing",image:"Images/C++.jpg",numberOfPages:100,author:"Saif",price:200},
+                    {ISBN:5,name:"Python",category:"programing",image:"Images/Python.jpg",numberOfPages:30,author:"Hesham",price:550},
+                    {ISBN:6,name:"MongoDB",category:"programing",image:"Images/MongoDB.jpg",numberOfPages:120,author:"Yehya",price:950}
+                ],
+                list:[],
+            wishlist: false
+
+            }),
+            methods:{
+                addList(book){
+                    this.list.find(value => value.ISBN==book.ISBN)?"":this.list.push(book);
+                    
+                },
+                remove(book){
+                    this.list = this.list.filter(value => value.ISBN != book.ISBN);
+                },
+                formatCurrency(val){
+                    return Intl.NumberFormat("ar-SA",{
+                        style:"currency",
+                        currency:"SAR",
+                        minimumFractionDigits:0
+                    }).format(val)
+                }
+            }
+        });
+    app.mount("#MainDiv");
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+</html>
